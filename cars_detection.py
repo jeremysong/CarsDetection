@@ -15,6 +15,7 @@ class VehicleTrackSet(object):
     def decrement_visit(self):
         self.visit_times -= 1
 
+
 # Each vehicle has its own vehicleTrackSet object
 vehicle_track_set_list = list()
 
@@ -28,7 +29,7 @@ def nearest_track_set(bounding_box):
     track_set_candidate = dict()
 
     for vehicle_track_set in vehicle_track_set_list:
-        if vehicle_track_set.visit_times != 0:
+        if vehicle_track_set.visit_times > 0:
             track_set = vehicle_track_set.track_set
             diff_x = abs(track_set[-1].x - bounding_box[0])
             diff_y = abs(track_set[-1].y - bounding_box[1])
@@ -39,7 +40,9 @@ def nearest_track_set(bounding_box):
                     track_set_candidate[lost_value] = vehicle_track_set
     if track_set_candidate:
         min_key = min(track_set_candidate)
-        [track_set_candidate[key].decrement_visit() for key in track_set_candidate if key != min_key]
+        [vehicle_track_set.decrement_visit() for vehicle_track_set in vehicle_track_set_list]
+        # Reset available visit time
+        track_set_candidate[min_key].visit_times = 10
         return track_set_candidate[min_key].track_set
     else:
         return None
@@ -111,11 +114,12 @@ def main():
             previous_track_image = track_image
 
             # time.sleep(0.1)
+
         else:
             break
 
 
 if __name__ == '__main__':
     main()
-    print("Finished.")
+    print("Finish.")
 
