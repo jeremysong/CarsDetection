@@ -79,11 +79,11 @@ def main():
     while camera.isOpened():
         is_success, image = camera.read()
         if is_success:
-            mask = background_subtractor.apply(image, is_success, 0.1)
+            mask = background_subtractor.apply(image, None, 0.1)
             # Vehicles will be detected from this image
-            track_image = Image(ndimage.median_filter(mask, 3), cv2image=True)
-
-            blobs = track_image.findBlobs(minsize=200, maxsize=800)
+            # track_image = Image(ndimage.median_filter(mask, 3), cv2image=True)
+            track_image = Image(mask)
+            blobs = track_image.findBlobs(minsize=300, maxsize=800)
             if not blobs:
                 # print('No Blobs Found.')
                 continue
@@ -114,12 +114,13 @@ def main():
             previous_track_image = track_image
 
             # time.sleep(0.1)
-
         else:
+            camera.release()
             break
 
 
 if __name__ == '__main__':
     main()
     print("Finish.")
+    cv2.destroyAllWindows()
 
