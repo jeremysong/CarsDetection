@@ -83,10 +83,15 @@ def main():
             # Vehicles will be detected from this image
             track_image = Image(ndimage.median_filter(mask, 3), cv2image=True)
 
-            blobs = track_image.findBlobs(minsize=300, maxsize=800)
+            blobs = track_image.findBlobs(minsize=250, maxsize=800)
+
             if not blobs:
                 # print('No Blobs Found.')
                 continue
+            else:
+                # print("Width: {0}; Height: {1}".format(blobs[0].width(), blobs[0].height()))
+                # Only keep near square blobs
+                blobs = filter(lambda b: 0.25 < b.width() / b.height() < 4, blobs)
 
             # print("Found {0} Blobs. {1}".format(len(blobs)))
 
