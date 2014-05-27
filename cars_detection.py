@@ -81,8 +81,8 @@ def main():
         if is_success:
             mask = background_subtractor.apply(image, None, 0.1)
             # Vehicles will be detected from this image
-            # track_image = Image(ndimage.median_filter(mask, 3), cv2image=True)
-            track_image = Image(mask)
+            track_image = Image(ndimage.median_filter(mask, 3), cv2image=True)
+
             blobs = track_image.findBlobs(minsize=300, maxsize=800)
             if not blobs:
                 # print('No Blobs Found.')
